@@ -5,16 +5,30 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#666"
+
+        android:id="@+id/replace"
         tools:context=".MainActivity">
 
     <TextView
-            android:id="@+id/aaaa"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/statusLayout"
+            android:gravity="center"
+            android:background="#ff0"
+            android:layout_width="300dp"
+            android:layout_height="299dp"
             android:text="Hello World!"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
+    <Button
+            android:id="@+id/newAdapter"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="设置新的adapter"
+            android:layout_width="0dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_height="wrap_content"/>
+
 
 </android.support.constraint.ConstraintLayout>

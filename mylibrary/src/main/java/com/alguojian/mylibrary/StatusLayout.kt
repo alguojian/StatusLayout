@@ -1,6 +1,5 @@
 package com.alguojian.mylibrary
 
-import android.R
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
@@ -17,21 +16,25 @@ import android.widget.FrameLayout
  * @author alguojian
  * @date 2019/4/12
  */
+@Suppress("UNREACHABLE_CODE")
 class StatusLayout {
     private var statusAdapter: StatusAdapter? = null//适配器对象，用于获得待加载的view
     private var context: Context? = null
     private var viewGroup: ViewGroup? = null//承载加载布局的viewGroup
     private var statusView: View? = null//待加载的view
-    private var status = STATUSLAYOUT_STATUS_SUCCESS//页面加载的状态
+    private var status = STATUS_LAYOUT_STATUS_SUCCESS//页面加载的状态
     private val mStatusViews = SparseArray<View?>(4)//存储加载过得的view
     private var data: String? = null//其他的数据
     private var click: View.OnClickListener? = null
 
+    private var isRootView = true//当在fragment中或者动态引入中的view中使用时，需要判断当前的view是否为根view，如果不是需要返回根view供使用者调用
+    private lateinit var rootView: View
+
     companion object {
-        const val STATUSLAYOUT_STATUS_LOADING = 0//加载中
-        const val STATUSLAYOUT_STATUS_SUCCESS = 1//加载成功
-        const val STATUSLAYOUT_STATUS_FAIL = 2//加载失败
-        const val STATUSLAYOUT_STATUS_EMPTY = 3//加载空数据
+        const val STATUS_LAYOUT_STATUS_LOADING = 0//加载中
+        const val STATUS_LAYOUT_STATUS_SUCCESS = 1//加载成功
+        const val STATUS_LAYOUT_STATUS_FAIL = 2//加载失败
+        const val STATUS_LAYOUT_STATUS_EMPTY = 3//加载空数据
         private var TAG = "asdfghjkl"
 
         @SuppressLint("StaticFieldLeak")
@@ -43,7 +46,7 @@ class StatusLayout {
 
         @JvmOverloads
         @JvmStatic
-        fun setDebug(boolean: Boolean=true, string: String?=null) {
+        fun setDebug(boolean: Boolean = true, string: String? = null) {
             isDebug = boolean
             if (!TextUtils.isEmpty(string))
                 TAG = string!!
@@ -53,7 +56,7 @@ class StatusLayout {
          * 返回自身对象
          */
         @JvmStatic
-        fun getThis(): StatusLayout {
+        fun getInstance(): StatusLayout {
             if (statusLayout == null) {
                 synchronized(StatusLayout::class.java) {
                     statusLayout = StatusLayout()
@@ -83,8 +86,8 @@ class StatusLayout {
     /**
      * 返回根view
      */
-    fun getViewGroup(): ViewGroup? {
-        return viewGroup
+    fun getRootView(): View {
+        return if (isRootView) viewGroup ?: rootView else rootView
     }
 
     /**
@@ -106,19 +109,40 @@ class StatusLayout {
      * 绑定activity
      */
     fun attachView(activity: Activity): StatusLayout {
-        context = activity
-        viewGroup = activity.findViewById(R.id.content)
+        val view: View = activity.findViewById(R.id.statusLayout) ?: return this@StatusLayout
+        structureViewGroup(activity, view)
         return this@StatusLayout
+    }
+
+    /**
+     * 重置数据
+     */
+    private fun resetData(context: Context, viewGroup: ViewGroup) {
+        this@StatusLayout.context = context
+        this@StatusLayout.viewGroup = viewGroup
+        this@StatusLayout.status = STATUS_LAYOUT_STATUS_SUCCESS
+        this@StatusLayout.mStatusViews.clear()
+        this@StatusLayout.statusView = null
+        this@StatusLayout.data = null
     }
 
     /**
      * 绑定某一个view，fragment中入如果绑定根view，在onCreateView()需要返回该viewGroup
      */
-    fun attachView(view: View): StatusLayout {
-        context = view.context
-        viewGroup = FrameLayout(context)
-        val layoutParams = view.layoutParams
+    fun attachView(rootView: View): StatusLayout {
+        this@StatusLayout.rootView = rootView
+        val view: View = rootView.findViewById(R.id.statusLayout) ?: return this@StatusLayout
+        this@StatusLayout.isRootView = true
+        structureViewGroup(view.context, view)
+        return this@StatusLayout
+    }
 
+    /**
+     * 构造新的管理布局
+     */
+    private fun structureViewGroup(context: Context, view: View) {
+        this@StatusLayout.viewGroup = FrameLayout(context)
+        val layoutParams = view.layoutParams
         if (null != layoutParams) {
             viewGroup!!.layoutParams = layoutParams
         }
@@ -128,12 +152,13 @@ class StatusLayout {
             val indexOfChild = parent.indexOfChild(view)
             parent.removeView(view)
             parent.addView(viewGroup, indexOfChild)
+            this@StatusLayout.isRootView = false
         }
         viewGroup!!.addView(
             view,
             FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
         )
-        return this@StatusLayout
+        resetData(context, viewGroup!!)
     }
 
     /**
@@ -146,9 +171,11 @@ class StatusLayout {
     /**
      * 设置其他的数据
      */
-    fun setDate(string: String) {
+    fun setDate(string: String): StatusLayout {
         this@StatusLayout.data = string
+        return this@StatusLayout
     }
+
 
     /**
      * 设置适配器
@@ -159,28 +186,29 @@ class StatusLayout {
 
 
     fun showLoading() {
-        showLoadingStatus(STATUSLAYOUT_STATUS_LOADING)
+        showLoadingStatus(STATUS_LAYOUT_STATUS_LOADING)
     }
 
-    fun showLoadSuccess() {
-        showLoadingStatus(STATUSLAYOUT_STATUS_SUCCESS)
+    fun showSuccess() {
+        showLoadingStatus(STATUS_LAYOUT_STATUS_SUCCESS)
     }
 
-    fun showLoadFailed() {
-        showLoadingStatus(STATUSLAYOUT_STATUS_FAIL)
+    fun showFailed() {
+        showLoadingStatus(STATUS_LAYOUT_STATUS_FAIL)
     }
 
     fun showEmpty() {
-        showLoadingStatus(STATUSLAYOUT_STATUS_EMPTY)
+        showLoadingStatus(STATUS_LAYOUT_STATUS_EMPTY)
     }
 
     /**
      * 展示新的展示状态
      */
-    private fun showLoadingStatus(status: Int = STATUSLAYOUT_STATUS_LOADING) {
+    private fun showLoadingStatus(status: Int = STATUS_LAYOUT_STATUS_LOADING) {
         if (this@StatusLayout.status == status || null == statusAdapter || null == context || null == viewGroup) {
             if (this@StatusLayout.status != status && isDebug) {
                 showLog("statusAdapter--context--viewGroup--其中状态为null")
+                throw IllegalStateException("--------请先初始化stateLayout-------xml中是否使用id--stateLayout--进行包裹")
             }
             return
         }
@@ -194,23 +222,18 @@ class StatusLayout {
 
         try {
             val currentView = statusAdapter!!.getView(this@StatusLayout, view, status)
-
             if (null == currentView) {
                 showLog("adapter 中 view没有加载完全")
                 return
             }
-
             if (currentView != statusView || viewGroup!!.indexOfChild(currentView) < 0) {
                 if (null != statusView) viewGroup!!.removeView(statusView)
-
                 viewGroup!!.addView(currentView)
-
                 val layoutParams = currentView.layoutParams
                 if (null != layoutParams) {
                     layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
                     layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
                 }
-
             } else if (viewGroup!!.indexOfChild(currentView) != viewGroup!!.childCount - 1) {
                 currentView.bringToFront()
             }
@@ -220,9 +243,7 @@ class StatusLayout {
             e.printStackTrace()
             showLog(e.message)
         }
-
     }
-
 
     private fun showLog(string: String?) {
         if (isDebug && !TextUtils.isEmpty(string)) Log.d(TAG, string)

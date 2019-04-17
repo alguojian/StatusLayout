@@ -1,6 +1,6 @@
 ### StatusLayout 多种加载view状态的管理viewGroup
 
-#### 使用如下 :
+#### 使用kotlin编写，使用如下 :
 
 #### 1.Add it in your root build.gradle at the end of repositories:
 ```
@@ -18,7 +18,9 @@ dependencies {
 }
 ```
 
-##### 支持在activity，和fragment中使用，支持包裹任意view使用，只需要在使用的view中使用--id--statusLayout即可
+
+
+#### 支持在activity，和fragment中使用，支持包裹任意view使用，只需要在使用的view中使用--id--statusLayout即可
 
 ```
     <TextView

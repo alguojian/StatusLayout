@@ -1,22 +1,21 @@
 ### StatusLayout 多种加载view状态的管理viewGroup
 
-> 使用如下 :
+#### 使用如下 :
 
 #### 1.Add it in your root build.gradle at the end of repositories:
 ```
 allprojects {
-            repositories {
-            ...
-            maven { url 'https://www.jitpack.io' }
-            }
+        repositories {
+             maven { url 'https://www.jitpack.io' }
+        }
 }
 ```
 
 #### 2.Add the dependency
 ```
 dependencies {
-                implementation 'com.github.ALguojian:StatusLayout:0.0.1'
-        }
+        implementation 'com.github.ALguojian:StatusLayout:1.0.0'
+}
 ```
 
 ##### 支持在activity，和fragment中使用，支持包裹任意view使用，只需要在使用的view中使用--id--statusLayout即可
@@ -45,17 +44,22 @@ StatusLayout.getInstance().setDefaultAdapter(DefaultStatusAdapter())
 //开启debug日志，默认关闭
 StatusLayout.setDebug()
 
+```
 
-//activity中使用
+##### 1.activity中使用
+```
 StatusLayout.getInstance()//获得默认构造对象
 .attachView(this)//绑定activity
 .onRetryClick(View.OnClickListener {//加载失败，点击重试的回调
         
 })
+```
 
-//fragment中使用，如果id-statusLayout，在fragment中为xml的根节点时，这是通过view的getParent()，是找不到父view的，
-所以新建了一个新的FramLayout()，进行状态管理，所以，在onCreateView中需要返回StatusLayout.getInstance().getRootView()
+##### 2.fragment中使用
+**注意：：如果id-statusLayout，在fragment中为xml的根节点时，这是通过view的getParent()，是找不到父view的，
+所以新建了一个新的FramLayout()，进行状态管理，所以，在onCreateView中需要返回StatusLayout.getInstance().getRootView()**
 
+```
 val inflate: ViewDataBinding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.fragment_simple, container, false)
 
 StatusLayout.getInstance()
@@ -64,9 +68,10 @@ StatusLayout.getInstance()
 
 //需要返回管理view
 return StatusLayout.getInstance().getRootView()
+```
 
-
-//更新状态
+##### 3.更新状态
+```
 StatusLayout.getInstance().showLoading()
 StatusLayout.getInstance().showSuccess()
 StatusLayout.getInstance().showFailed()
@@ -80,7 +85,7 @@ statusLayout.attachView(this).onRetryClick(View.OnClickListener {
 
 ```
 
-#### 设置适配器,只需要集成StatusAdapter，即可，返回自定义的加载view
+##### 4.为某一个页面设置新的适配器,只需要继承StatusAdapter，即可，返回自定义的加载view
 
 ```
 class DefaultStatusAdapter : StatusAdapter {
@@ -98,7 +103,7 @@ class DefaultStatusAdapter : StatusAdapter {
 
 ```
 
-#### 提供的默认加载view
+#### 提供的默认加载view，可以仿照次写自己需要的view
 ```
 class DefaultLoadingView(context: Context, private val mOnClickListener: View.OnClickListener?) :
     LinearLayout(context) {

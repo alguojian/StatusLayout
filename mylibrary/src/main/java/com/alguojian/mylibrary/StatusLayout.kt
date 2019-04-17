@@ -3,6 +3,7 @@ package com.alguojian.mylibrary
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
+import android.os.Build
 import android.text.TextUtils
 import android.util.Log
 import android.util.SparseArray
@@ -228,6 +229,7 @@ class StatusLayout {
             }
             if (currentView != statusView || viewGroup!!.indexOfChild(currentView) < 0) {
                 if (null != statusView) viewGroup!!.removeView(statusView)
+                if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP)currentView.elevation=Float.MAX_VALUE
                 viewGroup!!.addView(currentView)
                 val layoutParams = currentView.layoutParams
                 if (null != layoutParams) {

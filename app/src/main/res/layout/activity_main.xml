@@ -10,7 +10,8 @@
         android:id="@+id/replace"
         tools:context=".MainActivity">
 
-    <TextView
+    <Button
+
             android:id="@+id/statusLayout"
             android:gravity="center"
             android:background="#ff0"

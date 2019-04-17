@@ -38,9 +38,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun requestData() {
         StatusLayout.getInstance().showLoading()
-        StatusLayout.getInstance().showSuccess()
-        StatusLayout.getInstance().showFailed()
-        StatusLayout.getInstance().showEmpty()
         handler.postDelayed({ StatusLayout.getInstance().showFailed() }, 2000)
     }
 }

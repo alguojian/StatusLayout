@@ -1,6 +1,10 @@
 ### StatusLayout 多种加载view状态的管理viewGroup
 
-#### 使用kotlin编写，使用如下 :
+#### 使用kotlin编写，最新版本为 ,使用如下
+> [![](https://jitpack.io/v/ALguojian/StatusLayout.svg)](https://jitpack.io/#ALguojian/StatusLayout)
+
+
+
 
 #### 1.Add it in your root build.gradle at the end of repositories:
 ```
@@ -14,10 +18,21 @@ allprojects {
 #### 2.Add the dependency
 ```
 dependencies {
-        implementation 'com.github.ALguojian:StatusLayout:1.0.0'
+        implementation 'com.github.ALguojian:StatusLayout:1.0.3'
 }
 ```
 
+#### 3.如果项目没有添加kotlin支持，需要在项目build文件以及app添加添加，我现在使用1.3.21版本
+```
+dependencies {
+        classpath 'com.android.tools.build:gradle:3.3.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+}
+    
+dependencies {
+        implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}  
+```
 
 
 #### 支持在activity，和fragment中使用，支持包裹任意view使用，只需要在使用的view中使用--id--statusLayout即可

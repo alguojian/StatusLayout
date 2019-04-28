@@ -17,18 +17,22 @@ import com.alguojian.mylibrary.StatusLayout
  */
 class SimpleFragment : Fragment() {
 
+    lateinit var statusHelper: StatusLayout.StatusHelper
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         val inflate: ViewDataBinding = DataBindingUtil.inflate<ViewDataBinding>(inflater, R.layout.fragment_simple, container, false)
-        StatusLayout.getInstance().attachView(inflate.root).onRetryClick(View.OnClickListener { requestData() })
+        statusHelper= StatusLayout.attachView(inflate.root).onRetryClick {
+            requestData()
+        }
         inflate.root.findViewById<View>(R.id.statusLayout).setOnClickListener {
             requestData()
         }
-        return StatusLayout.getInstance().getRootView()
+        return StatusLayout.getRootView()
     }
 
     private fun requestData() {
-        StatusLayout.getInstance().showLoading()
-        MainActivity.handler.postDelayed({ StatusLayout.getInstance().showFailed() }, 2000)
+        statusHelper.showLoading()
+        MainActivity.handler.postDelayed({statusHelper.showFailed() }, 2000)
     }
 }

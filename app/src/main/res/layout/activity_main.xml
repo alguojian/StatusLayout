@@ -6,12 +6,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#666"
-
         android:id="@+id/replace"
         tools:context=".MainActivity">
 
     <Button
-
+            android:layout_marginTop="60dp"
             android:id="@+id/statusLayout"
             android:gravity="center"
             android:background="#ff0"
@@ -27,6 +26,26 @@
             app:layout_constraintTop_toTopOf="parent"
             android:text="设置新的adapter"
             android:layout_width="0dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_height="wrap_content"/>
+
+    <Button
+            android:id="@+id/fragment"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="体验fragment"
+            android:layout_width="0dp"
+            android:layout_marginTop="30dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_height="wrap_content"/>
+
+    <Button
+            android:id="@+id/newActivity"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="新页面"
+            android:layout_width="0dp"
+            android:layout_marginTop="60dp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_height="wrap_content"/>

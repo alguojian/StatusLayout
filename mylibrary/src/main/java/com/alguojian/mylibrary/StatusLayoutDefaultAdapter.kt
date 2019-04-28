@@ -8,15 +8,16 @@ import android.view.View
  * @author alguojian
  * @date 2019/4/12
  */
-class DefaultStatusAdapter : StatusAdapter {
-    override fun getView(statusLayout: StatusLayout, statusView: View?, status: Int): View? {
-
+class StatusLayoutDefaultAdapter : StatusAdapter {
+    override fun getView(statusHelper: StatusLayout.StatusHelper, statusView: View?, status: Int): View? {
         var defaultLoadingView: DefaultLoadingView? = null
         if (statusView != null && statusView is DefaultLoadingView) defaultLoadingView = statusView
         if (defaultLoadingView == null) {
-            defaultLoadingView = DefaultLoadingView(statusLayout.getContext(), statusLayout.getRetryClick())
+            defaultLoadingView = DefaultLoadingView(statusHelper.context!!, statusHelper.click)
         }
         defaultLoadingView.setStatus(status)
         return defaultLoadingView
+
     }
+
 }

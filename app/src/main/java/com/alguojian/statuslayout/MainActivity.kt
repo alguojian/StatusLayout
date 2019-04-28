@@ -3,8 +3,7 @@ package com.alguojian.statuslayout
 import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AppCompatActivity
-import android.view.View
-import com.alguojian.mylibrary.DefaultStatusAdapter
+import com.alguojian.mylibrary.StatusLayoutDefaultAdapter
 import com.alguojian.mylibrary.StatusLayout
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -14,6 +13,8 @@ class MainActivity : AppCompatActivity() {
         val handler = Handler()
     }
 
+    lateinit var statusHelper: StatusLayout.StatusHelper
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -21,23 +22,25 @@ class MainActivity : AppCompatActivity() {
         newAdapter.setOnClickListener {
             Main2Activity.start(this)
         }
+        fragment.setOnClickListener {
+            Main3Activity.start(this)
+        }
 
-        StatusLayout.getInstance().setDefaultAdapter(DefaultStatusAdapter())
-        StatusLayout.setDebug()
-
-//        supportFragmentManager.beginTransaction().replace(R.id.replace,SimpleFragment()).commitNow()
-
-        StatusLayout.getInstance().attachView(this).onRetryClick(View.OnClickListener {
-            requestData()
-        })
+        newActivity.setOnClickListener {
+            Main4Activity.start(this)
+        }
 
         statusLayout.setOnClickListener {
+            requestData()
+        }
+        StatusLayout.setDefaultAdapter(StatusLayoutDefaultAdapter())
+        statusHelper = StatusLayout.attachView(this).onRetryClick {
             requestData()
         }
     }
 
     private fun requestData() {
-        StatusLayout.getInstance().showLoading()
-        handler.postDelayed({ StatusLayout.getInstance().showFailed() }, 2000)
+        statusHelper.showLoading()
+        handler.postDelayed({ statusHelper.showSuccess() }, 2000)
     }
 }

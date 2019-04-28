@@ -15,7 +15,7 @@ import android.widget.TextView
  * @date 2019/4/12
  */
 @SuppressLint("ViewConstructor")
-class DefaultLoadingView(context: Context, private val mOnClickListener: View.OnClickListener?) :
+class DefaultLoadingView(context: Context, private val mOnClickListener: (() -> Unit?)? = null) :
     LinearLayout(context) {
 
     private val mTextView: TextView
@@ -58,7 +58,9 @@ class DefaultLoadingView(context: Context, private val mOnClickListener: View.On
             StatusLayout.STATUS_LAYOUT_STATUS_FAIL -> {
                 str = "点击空白重试"
                 image = R.drawable.status_ic_state_error
-                setOnClickListener(mOnClickListener)
+                setOnClickListener {
+                    mOnClickListener?.invoke()
+                }
             }
             StatusLayout.STATUS_LAYOUT_STATUS_EMPTY -> {
                 str = "暂无数据"

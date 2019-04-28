@@ -14,5 +14,5 @@ interface StatusAdapter {
      * 待加载的类[statusView]
      * 加载类的状态，用于更新待加载view的信息[status]
      */
-    fun getView(statusLayout: StatusLayout, statusView: View?, status: Int): View?
+    fun getView(statusHelper: StatusLayout.StatusHelper, statusView: View?, status: Int): View?
 }

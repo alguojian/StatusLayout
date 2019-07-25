@@ -92,6 +92,7 @@ object StatusLayout {
      */
     fun attachView(rootView: View): StatusHelper {
         this@StatusLayout.rootView = rootView
+        this@StatusLayout.isRootView = true
         val view: View = rootView.findViewById(R.id.statusLayout) ?: return StatusHelper(null, null, null)
         this@StatusLayout.isRootView = true
         return structureViewGroup(view.context, view)
@@ -114,12 +115,8 @@ object StatusLayout {
             parent.addView(viewGroup, indexOfChild)
             this@StatusLayout.isRootView = false
         }
-        viewGroup!!.addView(
-            view,
-            FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT)
-        )
+        viewGroup!!.addView(view, FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT))
         return StatusHelper(context, newAdapter ?: defaultAdapter, viewGroup)
-
     }
 
     /**
@@ -179,7 +176,7 @@ object StatusLayout {
                     showLog("statusAdapter--context--viewGroup--其中一个状态为null")
                 }
                 if (this@StatusHelper.status != status) {
-                    throw IllegalStateException("-----------检查是否初始化stateLayout的adapter-------xml中是否使用id---statusLayout")
+                    throw Exception("-----------检查是否初始化stateLayout的adapter-------xml中是否使用id---statusLayout")
                 }
                 return
             }

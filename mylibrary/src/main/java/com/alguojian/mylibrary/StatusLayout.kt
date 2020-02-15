@@ -33,7 +33,7 @@ object StatusLayout {
     private var viewGroup: ViewGroup? = null//承载加载布局的viewGroup
 
     //当在fragment中或者动态引入中的view中使用时，需要判断当前的view是否为根view，如果不是需要返回根view供使用者调用
-    private var isRootView = true
+    private var isRootView = false
     private lateinit var rootView: View
 
     @JvmOverloads
@@ -92,7 +92,7 @@ object StatusLayout {
      */
     fun attachView(rootView: View): StatusHelper {
         this@StatusLayout.rootView = rootView
-        this@StatusLayout.isRootView = true
+        this@StatusLayout.isRootView = false
         val view: View = rootView.findViewById(R.id.statusLayout) ?: return StatusHelper(null, null, null)
         this@StatusLayout.isRootView = true
         return structureViewGroup(view.context, view)

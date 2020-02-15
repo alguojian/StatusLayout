@@ -1,9 +1,7 @@
 ### StatusLayout 多种加载view状态的管理viewGroup
 
 #### 使用kotlin编写，最新版本为 ,使用如下
-> [![](https://jitpack.io/v/ALguojian/StatusLayout.svg)](https://jitpack.io/#ALguojian/StatusLayout)
-
-
+[![](https://jitpack.io/v/alguojian/StatusLayout.svg)](https://jitpack.io/#alguojian/StatusLayout)
 
 
 #### 1.Add it in your root build.gradle at the end of repositories:
@@ -18,7 +16,7 @@ allprojects {
 #### 2.Add the dependency
 ```
 dependencies {
-        implementation 'com.github.ALguojian:StatusLayout:1.0.4'
+        implementation 'com.github.ALguojian:StatusLayout:1.0.6'
 }
 ```
 
